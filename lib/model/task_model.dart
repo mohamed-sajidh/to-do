@@ -1,4 +1,4 @@
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 part 'task_model.g.dart';
 
 @HiveType(typeId: 1)
@@ -7,7 +7,7 @@ class TaskModel {
   final String title;
 
   @HiveField(1)
-  final String isCompleted;
+  final bool isCompleted;
 
   const TaskModel(this.title, this.isCompleted);
 }

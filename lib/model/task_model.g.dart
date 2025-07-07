@@ -18,7 +18,7 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
     };
     return TaskModel(
       fields[0] as String,
-      fields[1] as String,
+      fields[1] as bool,
     );
   }
 

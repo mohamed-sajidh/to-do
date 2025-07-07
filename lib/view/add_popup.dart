@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-void addTodoDialog(BuildContext context, Function(String) onAdd) {
+void addTodoDialog(BuildContext context, Function(String, bool) onAdd) {
   final TextEditingController todoController = TextEditingController();
 
   showDialog(
@@ -17,20 +18,18 @@ void addTodoDialog(BuildContext context, Function(String) onAdd) {
         ),
         actions: [
           TextButton(
+            onPressed: () => Get.back(),
             child: const Text("Cancel"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
           ),
           ElevatedButton(
-            child: const Text("Add"),
             onPressed: () {
               final String task = todoController.text.trim();
               if (task.isNotEmpty) {
-                onAdd(task);
-                Navigator.of(context).pop();
+                onAdd(task, false); // pass to callback
+                Get.back();
               }
             },
+            child: const Text("Add"),
           ),
         ],
       );

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:to_do/controller/task_controller.dart';
 import 'package:to_do/view/add_popup.dart';
 
 class Homepage extends StatefulWidget {
@@ -29,6 +33,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final TaskController controller = Get.put(TaskController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("To-Do List"),
@@ -36,48 +41,49 @@ class _HomepageState extends State<Homepage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: tasks.isEmpty
-            ? const Center(child: Text("No tasks added yet"))
-            : ListView.separated(
-                itemCount: tasks.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemBuilder: (context, index) {
-                  final task = tasks[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(12),
+        child: Obx(
+          () {
+            if (controller.tasks.isEmpty) {
+              return const Center(child: Text("No tasks found"));
+            }
+
+            return ListView.separated(
+              itemCount: controller.tasks.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final task = controller.tasks[index];
+
+                return ListTile(
+                  leading: Checkbox(
+                    value: task.isCompleted,
+                    onChanged: (value) {
+                      controller.toggleTask(index, value ?? false);
+                    },
+                  ),
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      decoration:
+                          task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
-                    child: ListTile(
-                      leading: Checkbox(
-                        value: task['isCompleted'],
-                        onChanged: (_) => toggleTask(index),
-                      ),
-                      title: Text(
-                        task['title'],
-                        style: TextStyle(
-                          decoration: task['isCompleted']
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                          fontSize: 16,
-                        ),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => deleteTask(index),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      controller.deleteTask(index);
+                    },
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addTodoDialog(context, (task) {
-            setState(() {
-              tasks.add({'title': task, 'isCompleted': false});
-            });
+          addTodoDialog(context, (taskTitle, isCompleted) async {
+            await controller.addTasks(taskTitle, isCompleted);
+            setState(() {});
           });
         },
         child: const Icon(Icons.add),
