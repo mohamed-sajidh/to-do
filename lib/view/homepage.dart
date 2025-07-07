@@ -20,7 +20,7 @@ class Homepage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.green,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -87,7 +87,7 @@ class Homepage extends StatelessWidget {
             await controller.addTasks(taskTitle, isCompleted);
           });
         },
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
