@@ -8,28 +8,64 @@ void addTodoDialog(BuildContext context, Function(String, bool) onAdd) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Add New Task"),
-        content: TextField(
-          controller: todoController,
-          decoration: const InputDecoration(
-            hintText: "Enter your task",
-            border: OutlineInputBorder(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          "📝 Add New Task",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            TextField(
+              controller: todoController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Enter your task...",
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actionsPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text("Cancel"),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () {
               final String task = todoController.text.trim();
               if (task.isNotEmpty) {
-                onAdd(task, false); // pass to callback
+                onAdd(task, false);
                 Get.back();
               }
             },
-            child: const Text("Add"),
+            icon: const Icon(Icons.check),
+            label: const Text("Add"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
           ),
         ],
       );
