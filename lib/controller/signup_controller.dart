@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:to_do/model/signup_model.dart';
 import 'package:to_do/view/homepage.dart';
+import 'package:to_do/view/signin.dart';
 
 class SignupController extends GetxController {
   late Box<SignupModel> signupBox;
@@ -41,6 +42,7 @@ class SignupController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        Get.to(() => const SignInScreen());
       }
     } catch (e) {
       print("error occured while adding $e");
